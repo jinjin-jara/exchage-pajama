@@ -9,7 +9,7 @@
     >
       <ul class="mt-4">
         <li
-          v-for="(participant, index) in selectedParticipants"
+          v-for="(participant, index) in draggedParticipant"
           :key="index"
           class="py-2 px-4 border-b border-gray-200"
         >
@@ -19,7 +19,7 @@
     </div>
 
     <!-- 원형 버튼들 -->
-    <div class="w-full flex space-x-2 justify-center">
+    <div class="w-full flex space-x-2 justify-center" @dragover.prevent>
       <div 
         v-for="participant in availableParticipants"
         :key="participant.id"
