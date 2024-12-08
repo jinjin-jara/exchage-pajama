@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full p-2 space-y-6">
+  <div class="w-full">
     <!-- 참여자 목록 -->
     <div
       class="mt-8 h-48 p-6 rounded-lg"
@@ -38,7 +38,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { ref } from 'vue';
 
 interface Participant {
@@ -46,60 +46,48 @@ interface Participant {
   name: string;
   imageUrl: string
 }
+const availableParticipants = ref<Participant[]>([
+    { id: 1, name: '이혜인', imageUrl: '/face.png' },
+    { id: 2, name: '이예지', imageUrl: '/face.png' },
+    { id: 3, name: '장은빈', imageUrl: '/face.png' },
+    { id: 4, name: '최진경', imageUrl: '/face.png' },
+  ]);
 
-export default {
-  setup() {
-    const availableParticipants = ref<Participant[]>([
-      { id: 1, name: '이혜인', imageUrl: '/face.png' },
-      { id: 2, name: '이예지', imageUrl: '/face.png' },
-      { id: 3, name: '장은빈', imageUrl: '/face.png' },
-      { id: 4, name: '최진경', imageUrl: '/face.png' },
-    ]);
+  // 참여자 목록 (드래그 앤 드롭을 통해 참여자로 이동한 항목)
+  const participants = ref<Participant[]>([]);
 
-    // 참여자 목록 (드래그 앤 드롭을 통해 참여자로 이동한 항목)
-    const participants = ref<Participant[]>([]);
+  // 드래그한 참가자와 드래그 시작한 목록을 추적
+  const draggedParticipant = ref<Participant | null>(null);
+  const draggedFrom = ref<'available' | 'participants' | null>(null);
 
-    // 드래그한 참가자와 드래그 시작한 목록을 추적
-    const draggedParticipant = ref<Participant | null>(null);
-    const draggedFrom = ref<'available' | 'participants' | null>(null);
+  const onDragStart = (event: DragEvent, participant: Participant, listType: 'available' | 'participants') => {
+    draggedParticipant.value = participant;
+    draggedFrom.value = listType;
+  };
 
-    const onDragStart = (event: DragEvent, participant: Participant, listType: 'available' | 'participants') => {
-      draggedParticipant.value = participant;
-      draggedFrom.value = listType;
-    };
-
-    const onDrop = (event: DragEvent, targetList: 'available' | 'participants') => {
-      // 드래그된 참가자가 있을 경우
-      if (draggedParticipant.value) {
-        if (targetList === 'participants') {
-          // 원형 버튼 목록에서 참여자 목록으로 이동
-          if (draggedFrom.value === 'available') {
-            participants.value.push(draggedParticipant.value);
-            // 이동한 항목을 원형 버튼 목록에서 제거
-            availableParticipants.value = availableParticipants.value.filter(p => p.id !== draggedParticipant.value!.id);
-          }
-        } else {
-          // 참여자 목록에서 원형 버튼 목록으로 이동
-          if (draggedFrom.value === 'participants') {
-            availableParticipants.value.push(draggedParticipant.value);
-            // 이동한 항목을 참여자 목록에서 제거
-            participants.value = participants.value.filter(p => p.id !== draggedParticipant.value!.id);
-          }
+  const onDrop = (event: DragEvent, targetList: 'available' | 'participants') => {
+    // 드래그된 참가자가 있을 경우
+    if (draggedParticipant.value) {
+      if (targetList === 'participants') {
+        // 원형 버튼 목록에서 참여자 목록으로 이동
+        if (draggedFrom.value === 'available') {
+          participants.value.push(draggedParticipant.value);
+          // 이동한 항목을 원형 버튼 목록에서 제거
+          availableParticipants.value = availableParticipants.value.filter(p => p.id !== draggedParticipant.value!.id);
         }
-        // 드래그된 상태 초기화
-        draggedParticipant.value = null;
-        draggedFrom.value = null;
+      } else {
+        // 참여자 목록에서 원형 버튼 목록으로 이동
+        if (draggedFrom.value === 'participants') {
+          availableParticipants.value.push(draggedParticipant.value);
+          // 이동한 항목을 참여자 목록에서 제거
+          participants.value = participants.value.filter(p => p.id !== draggedParticipant.value!.id);
+        }
       }
-    };
-
-    return {
-      availableParticipants,
-      participants,
-      onDragStart,
-      onDrop,
-    };
-  },
-};
+      // 드래그된 상태 초기화
+      draggedParticipant.value = null;
+      draggedFrom.value = null;
+    }
+  };
 </script>
 
 <style scoped>
