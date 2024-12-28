@@ -108,6 +108,17 @@ export default {
             if (Math.abs(pos.x - targetX) > 5) {
               pos.x += pos.x < targetX ? 5 : -5;
             }
+
+            // Swap positions randomly at intermediate stages
+            if (pos.y > svgHeight / 3 && pos.y < (svgHeight * 2) / 3 && Math.random() < 0.01) {
+              const swapIndex = Math.floor(Math.random() * participants.value.length);
+              if (swapIndex !== index) {
+                const temp = pos.x;
+                pos.x = playerPositions.value[swapIndex].x;
+                playerPositions.value[swapIndex].x = temp;
+              }
+            }
+
             finished = false;
           }
 
@@ -125,7 +136,7 @@ export default {
 
         if (finished) {
           clearInterval(interval);
-          buttonText.value = "선물 교환 타임~!"; // Change button text
+          buttonText.value = "파자마 교환 타임~!"; // Change button text
         }
       }, 30);
     };

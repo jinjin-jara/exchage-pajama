@@ -1,22 +1,6 @@
 @import './base.css';
 
 @font-face {
-  font-family: 'Nunito';
-  src: url('/Nunito-Black.ttf') format('truetype');
-  font-weight: 900;
-}
-@font-face {
-  font-family: 'Nunito';
-  src: url('/Nunito-ExtraBold.ttf') format('truetype');
-  font-weight: 800;
-}
-@font-face {
-  font-family: 'Nunito';
-  src: url('/Nunito-SemiBold.ttf') format('truetype');
-  font-weight: 600;
-}
-
-@font-face {
   font-family: 'Pretendard';
   src: url('/Pretendard-Regular.woff2') format('woff2');
   font-weight: 400;
