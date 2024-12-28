@@ -1,9 +1,12 @@
 <template>
-  <div class="min-w-screen h-screen bg-white flex flex-col items-center p-2">
-    <div class="w-full h-full" :style="{ backgroundImage: 'url(/background.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }" />
-    <button>start!</button>
+  <div id="app">
+    <router-view />
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 </script>
+
+<style>
+/* 필요하면 전역 스타일 추가 */
+</style>
