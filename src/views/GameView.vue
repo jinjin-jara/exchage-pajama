@@ -103,18 +103,13 @@ const animatePlayers = (resultMapping) => {
       const targetIndex = participants.value.indexOf(targetGift);
       const targetX = targetIndex * lineWidth + lineWidth / 2;
 
-      // Add random chaotic movements before reaching the target
-      const randomX = (Math.random() - 0.5) * 5; // Random horizontal jitter
-      const randomY = Math.random() * 4; // Small random vertical jitter
-
       // Update positions
       if (pos.y < svgHeight - 50) {
-        pos.y += 5 + randomY; // Move down with some randomness
-        pos.x += pos.x < targetX ? randomX + 4 : randomX - 4; // Drift left or right randomly
+        pos.y += 5;
+        if (Math.abs(pos.x - targetX) > 5) {
+          pos.x += pos.x < targetX ? 5 : -5;
+        }
         finished = false;
-      } else {
-        // Ensure final alignment with the target
-        pos.x += pos.x < targetX ? 1 : -1;
       }
 
       // Draw participant images
@@ -135,6 +130,7 @@ const animatePlayers = (resultMapping) => {
     }
   }, 30);
 };
+
 
 const moveJjal = () => {
   const jjal = document.getElementById('jjal');
