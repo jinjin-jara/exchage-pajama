@@ -21,6 +21,7 @@
       </div>
     </div>
     <div id="jjal" class="absolute z-20"></div>
+    <div id="jjalTwo" class="absolute z-30" />
     <audio id="backgroundMusic" src="/air_dancer.mp3" loop></audio>
   </div>
 </template>
@@ -137,28 +138,35 @@ const animatePlayers = (resultMapping) => {
 
 const moveJjal = () => {
   const jjal = document.getElementById('jjal');
-  if (!jjal) return;
+  const jjalTwo = document.getElementById('jjalTwo');
+  if (!jjal || !jjalTwo) return;
+
+  let currentRotation = 0; // Initialize rotation angle
 
   function getRandomInRange(min, max) {
     return Math.random() * (max - min) + min;
   }
 
-  function getRandomPosition() {
-    const maxX = window.innerWidth - jjal.offsetWidth;
-    const maxY = window.innerHeight - jjal.offsetHeight;
-    const x = Math.max(-300, Math.floor(getRandomInRange(-10, 10) * maxX));
+  function getRandomPosition(element) {
+    const maxX = Math.min(100, window.innerWidth - element.offsetWidth);
+    const maxY = window.innerHeight - element.offsetHeight;
+    const x = Math.max(-250, Math.floor(getRandomInRange(-5, 5) * maxX));
     const y = Math.max(0, Math.floor(Math.random() * maxY)) - 250;
     return { x, y };
   }
 
   function animateJjal() {
-    const { x, y } = getRandomPosition();
-    jjal.style.transform = `translate(${x}px, ${y}px)`;
+    const { x: x1, y: y1 } = getRandomPosition(jjal);
+    currentRotation += Math.random() * 360; // Increment rotation randomly
+    jjal.style.transform = `translate(${x1}px, ${y1}px) rotate(${currentRotation}deg)`;
+
+    // For jjalTwo
+    const { x: x2, y: y2 } = getRandomPosition(jjalTwo);
+    jjalTwo.style.transform = `translate(${x2}px, ${y2}px)`;
   }
 
-  setInterval(animateJjal, 1000); // Move every second
+  setInterval(animateJjal, 1200); // Move and rotate every second
 };
-
 
 function playAudio() {
   document.getElementById('backgroundMusic').play()
@@ -188,6 +196,15 @@ canvas {
   height: 87px;
   background-image: url('/jjal.png');
   background-size: cover;
-  transition: transform 1s linear;
+  transition: transform 1.2s linear;
+}
+
+#jjalTwo {
+  position: absolute;
+  width: 150px;
+  height: 147px;
+  background-image: url('/jjal_two.png');
+  background-size: cover;
+  transition: transform 1.2s linear;
 }
 </style>
